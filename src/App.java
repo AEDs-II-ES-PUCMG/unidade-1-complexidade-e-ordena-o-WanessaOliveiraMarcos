@@ -37,6 +37,15 @@ public class App {
     }
 
 
+    /**
+     * Exibe o conteúdo de um vetor de inteiros.
+     * @param vetor O vetor a ser exibido.
+     * @return String representando o conteúdo do vetor.
+     */
+    static String exibirVetor(Integer[] vetor) {
+        return Arrays.toString(vetor);
+    }
+
     public static void main(String[] args) {
         int tam = 20;
         Integer[] vetor = gerarVetorObjetos(tam);
@@ -46,6 +55,7 @@ public class App {
         Integer[] vetorOrdenadoBolha = bolha.ordenar(vetor);
 
         System.out.println("\nVetor ordenado método Bolha:");
+        System.out.println(exibirVetor(vetorOrdenadoBolha));
         System.out.println("Comparações: " + bolha.getComparacoes());
         System.out.println("Movimentações: " + bolha.getMovimentacoes());
         System.out.println("Tempo de ordenação (ms): " + bolha.getTempoOrdenacao());
@@ -54,5 +64,24 @@ public class App {
         *Fazer a implementacao do restante do main para a ordenacao 
         *  com os algoritmos InsertionSort e SelectionSort
         */
+
+        InsertionSort<Integer> insertionSort = new InsertionSort<>();
+
+        Integer[] vetorOrdenadoInsertSort = insertionSort.ordenar(vetor);
+        System.out.println("\nVetor ordenado método InsertSort:");
+        System.out.println(exibirVetor(vetorOrdenadoInsertSort));
+        System.out.println("Comparações: " + insertionSort.getComparacoes());
+        System.out.println("Movimentações: " + insertionSort.getMovimentacoes());
+        System.out.println("Tempo de ordenação (ms): " + insertionSort.getTempoOrdenacao());
+
+
+        SelectionSort<Integer> selectionSort = new SelectionSort<>();
+
+        Integer[] vetorOrdenadoSelectionSort = selectionSort.ordenar(vetor);
+        System.out.println("\nVetor ordenado método InsertSort:");
+        System.out.println(exibirVetor(vetorOrdenadoSelectionSort));
+        System.out.println("Comparações: " + selectionSort.getComparacoes());
+        System.out.println("Movimentações: " + selectionSort.getMovimentacoes());
+        System.out.println("Tempo de ordenação (ms): " + selectionSort.getTempoOrdenacao());
     }
 }
