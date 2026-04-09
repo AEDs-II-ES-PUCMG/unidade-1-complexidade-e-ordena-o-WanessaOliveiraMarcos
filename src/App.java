@@ -1,33 +1,14 @@
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 public class App {
     static final int[] tamanhosTesteGrande =  { 31_250_000, 62_500_000, 125_000_000, 250_000_000, 500_000_000 };
     static final int[] tamanhosTesteMedio =   {     12_500,     25_000,      50_000,     100_000,     200_000 };
     static final int[] tamanhosTestePequeno = {          3,          6,          12,          24,          48 };
     static Random aleatorio = new Random();
-    static long operacoes;
-    static double nanoToMilli = 1.0/1_000_000;
-    
+    static Scanner teclado = new Scanner(System.in);
 
-    /**
-     * Gerador de vetores aleatórios de tamanho pré-definido. 
-     * @param tamanho Tamanho do vetor a ser criado.
-     * @return Vetor com dados aleatórios, com valores entre 1 e (tamanho/2), desordenado.
-     */
-    static int[] gerarVetor(int tamanho){
-        int[] vetor = new int[tamanho];
-        for (int i = 0; i < tamanho; i++) {
-            vetor[i] = aleatorio.nextInt(1, tamanho/2);
-        }
-        return vetor;        
-    }
-
-    /**
-     * Gerador de vetores de objetos do tipo Integer aleatórios de tamanho pré-definido. 
-     * @param tamanho Tamanho do vetor a ser criado.
-     * @return Vetor de Objetos Integer com dados aleatórios, com valores entre 1 e (tamanho/2), desordenado.
-     */
     static Integer[] gerarVetorObjetos(int tamanho) {
         Integer[] vetor = new Integer[tamanho];
         for (int i = 0; i < tamanho; i++) {
@@ -36,52 +17,51 @@ public class App {
         return vetor;
     }
 
-
-    /**
-     * Exibe o conteúdo de um vetor de inteiros.
-     * @param vetor O vetor a ser exibido.
-     * @return String representando o conteúdo do vetor.
-     */
     static String exibirVetor(Integer[] vetor) {
         return Arrays.toString(vetor);
     }
 
     public static void main(String[] args) {
         int tam = 20;
-        Integer[] vetor = gerarVetorObjetos(tam);
+        Integer[] vetorOriginal = gerarVetorObjetos(tam);
+        IOrdenador<Integer> ordenador = null;
 
-        BubbleSort<Integer> bolha = new BubbleSort<>();
+        System.out.println("--- SISTEMA DE ORDENAÇÃO ---");
+        System.out.println("Vetor original: " + exibirVetor(vetorOriginal));
+        System.out.println("\nEscolha o método de ordenação que deseja:");
+        System.out.println("1. BubbleSort");
+        System.out.println("2. InsertionSort");
+        System.out.println("3. SelectionSort");
+        System.out.println("4. MergeSort");
+        System.out.print("Opção: ");
+        
+        int opcao = teclado.nextInt();
 
-        Integer[] vetorOrdenadoBolha = bolha.ordenar(vetor);
+        switch (opcao) {
+            case 1:
+                ordenador = new BubbleSort<>();
+                break;
+            case 2:
+                ordenador = new InsertionSort<>();
+                break;
+            case 3:
+                ordenador = new SelectionSort<>();
+                break;
+            case 4:
+                ordenador = new MergeSort<>();
+                break;
+            default:
+                System.out.println("Opção inválida! Encerrando.");
+                return;
+        }
 
-        System.out.println("\nVetor ordenado método Bolha:");
-        System.out.println(exibirVetor(vetorOrdenadoBolha));
-        System.out.println("Comparações: " + bolha.getComparacoes());
-        System.out.println("Movimentações: " + bolha.getMovimentacoes());
-        System.out.println("Tempo de ordenação (ms): " + bolha.getTempoOrdenacao());
+        // Execução polimórfica
+        Integer[] vetorOrdenado = ordenador.ordenar(vetorOriginal);
 
-        /* TO DO
-        *Fazer a implementacao do restante do main para a ordenacao 
-        *  com os algoritmos InsertionSort e SelectionSort
-        */
-
-        InsertionSort<Integer> insertionSort = new InsertionSort<>();
-
-        Integer[] vetorOrdenadoInsertSort = insertionSort.ordenar(vetor);
-        System.out.println("\nVetor ordenado método InsertSort:");
-        System.out.println(exibirVetor(vetorOrdenadoInsertSort));
-        System.out.println("Comparações: " + insertionSort.getComparacoes());
-        System.out.println("Movimentações: " + insertionSort.getMovimentacoes());
-        System.out.println("Tempo de ordenação (ms): " + insertionSort.getTempoOrdenacao());
-
-
-        SelectionSort<Integer> selectionSort = new SelectionSort<>();
-
-        Integer[] vetorOrdenadoSelectionSort = selectionSort.ordenar(vetor);
-        System.out.println("\nVetor ordenado método InsertSort:");
-        System.out.println(exibirVetor(vetorOrdenadoSelectionSort));
-        System.out.println("Comparações: " + selectionSort.getComparacoes());
-        System.out.println("Movimentações: " + selectionSort.getMovimentacoes());
-        System.out.println("Tempo de ordenação (ms): " + selectionSort.getTempoOrdenacao());
+        // Exibição dos resultados
+        System.out.println("\n--- RESULTADO: ---");
+        System.out.println("Vetor ordenado: " + exibirVetor(vetorOrdenado));
+        
+        teclado.close();
     }
 }
