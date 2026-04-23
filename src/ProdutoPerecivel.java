@@ -98,4 +98,12 @@ public class ProdutoPerecivel extends Produto{
 
     }        
     
+    @Override
+    public double getPorcentagemDesconto() {
+        long diasValidade = LocalDate.now().until(dataDeValidade, ChronoUnit.DAYS);
+        if (diasValidade <= 7) {
+            return 0.25;
+        }
+        return 0.0;
+    }   
 }

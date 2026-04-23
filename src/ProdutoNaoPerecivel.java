@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 /** 
  * MIT License
  *
@@ -64,5 +67,10 @@
         return String.format("1;%s;%.2f;%.2f", 
                                 descricao, precoCusto, margemLucro);
       
-    }        
+    } 
+
+    @Override
+    public double getPorcentagemDesconto() {
+        return 0.0;
+    }       
 }

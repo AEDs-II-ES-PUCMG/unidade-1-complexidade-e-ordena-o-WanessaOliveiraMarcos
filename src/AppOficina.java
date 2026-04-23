@@ -41,9 +41,9 @@ public class AppOficina {
     static IOrdenador<Produto> ordenador;
     static Produto[] copiaProdutosOrdenadosPorCodigo;
     static Produto[] copiaProdutosOrdenadosPorDescricao;
+    static Produto[] copiaProdutosOrdenadosPorPorcentagemDesconto;
     // #region utilidades
     static Scanner teclado;
-
     
 
     static <T extends Number> T lerNumero(String mensagem, Class<T> classe) {
@@ -92,6 +92,8 @@ public class AppOficina {
         System.out.println("2 - Inserção");
         System.out.println("3 - Seleção");
         System.out.println("4 - Mergesort");
+        System.out.println("5 - Quicksort");
+        System.out.println("6 - Heapsort");
         System.out.println("0 - Finalizar");
        
         return lerNumero("Digite sua opção", Integer.class);
@@ -127,13 +129,63 @@ public class AppOficina {
         return dadosCarregados;
     }
 
+    public static String lerTexto(String mensagem) {
+        Scanner teclado = new Scanner(System.in);
+        System.out.print(mensagem + ": ");
+        return teclado.nextLine();
+    }
 
+    static Produto buscaBinaria(Produto[] array, Comparator<Produto> comparador, Produto procurado) {
+        int min = 0;
+        int max = quantProdutos - 1;
+
+        while (min <= max) {
+            int meio = (min + max) / 2;
+
+            int cmp = comparador.compare(array[meio], procurado);
+
+            if (cmp == 0) {
+                return array[meio];
+            } else if (cmp < 0) {
+                min = meio + 1;
+            } else {
+                max = meio - 1;
+            }
+        }
+        return null;
+    }
     static Produto localizarProduto() {
         cabecalho();
-        System.out.println("Localizando um produto");
-        int numero = lerNumero("Digite o identificador do produto", Integer.class);
+        System.out.println("Deseja localizar o produto por:");
+        System.out.println("1 - Código");
+        System.out.println("2 - Descrição");
+        
+        int opcao = lerNumero("Opção", Integer.class);
 
-        return buscaBinariaPorCodigo(numero);
+        if (opcao == 1) {
+            int codigo = lerNumero("Digite o código do produto", Integer.class);
+            Produto procurado = new ProdutoNaoPerecivel("tmp", 1.0);
+            procurado.setIdProduto(codigo);
+        
+            return buscaBinaria(
+                copiaProdutosOrdenadosPorCodigo,
+                new ComparadorPorCodigo(),
+                procurado
+            );
+
+        } else if (opcao == 2) {
+            String descricao = lerTexto("Digite a descrição do produto");
+            Produto template = new ProdutoNaoPerecivel(descricao, 1.0);
+
+            return buscaBinaria(
+                copiaProdutosOrdenadosPorDescricao,
+                new ComparadorPorDescricao(),
+                template
+            );
+        }
+
+        System.out.println("Opção inválida!");
+        return null;
     }
 
     private static void mostrarProduto(Produto produto) {
@@ -169,6 +221,8 @@ public class AppOficina {
             case 2 -> ordenador = new InsertSort<>();
             case 3 -> ordenador = new SelectionSort<>();
             case 4 -> ordenador = new Mergesort<>();
+            case 5 -> ordenador = new QuickSort<>();
+            case 6 -> ordenador = new HeapSort<>();
             default -> { return; }
         }
 
@@ -229,6 +283,13 @@ public class AppOficina {
         }
     }
 
+    static void imprimirLista(String titulo, Produto[] lista) {
+        System.out.println("\n=== " + titulo + " ===");
+        for (Produto p : lista) {
+            System.out.println(p);
+        }
+    }
+
     public static void main(String[] args) {
         teclado = new Scanner(System.in);
         
@@ -238,6 +299,11 @@ public class AppOficina {
         IOrdenador<Produto> ord = new Mergesort<>(); // melhor algoritmo pois sua ordem de complexidade é O(n log n) no pior caso, enquanto são O(n²)
         copiaProdutosOrdenadosPorCodigo = ord.ordenar(produtos, new ComparadorPorCodigo());
         copiaProdutosOrdenadosPorDescricao = ord.ordenar(produtos, new ComparadorPorDescricao());
+        copiaProdutosOrdenadosPorPorcentagemDesconto = ord.ordenar(produtos, new ComparadorPorPorcentagemDesconto());
+
+        // imprimirLista("Ordenados por Código", copiaProdutosOrdenadosPorCodigo);
+        // imprimirLista("Ordenados por Descrição", copiaProdutosOrdenadosPorDescricao);
+        // imprimirLista("Ordenados por Desconto", copiaProdutosOrdenadosPorPorcentagemDesconto);
 
         embaralharProdutos();
 

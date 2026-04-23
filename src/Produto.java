@@ -165,4 +165,19 @@ public abstract class Produto implements Comparable<Produto> {
      * @return Uma string no formato "tipo; descrição;preçoDeCusto;margemDeLucro;[dataDeValidade]"
      */
     public abstract String gerarDadosTexto();
+
+
+    /* 
+    * Método para ser utilizado como base para o comparador por porcentagem de desconto. 
+    * O valor retornado deve ser a porcentagem de desconto concedida sobre o valor de venda do produto, considerando seu preço de custo, margem de lucro e
+    * dias de validade. Se o prazo de validade estiver a menos de 7 dias, será concedido desconto de 25%. Para produtos não perecíveis, o valor deve ser 0. 
+    */
+    public double getPorcentagemDesconto() {
+        return 0.0;
+    }
+
+
+    public void setIdProduto(int id) {
+        this.idProduto = id;
+    }   
 }
